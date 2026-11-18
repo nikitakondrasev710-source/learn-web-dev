@@ -553,6 +553,12 @@
   gap: 16px;
 }
 
+.slots__head-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .slots__title {
   margin: 0 0 4px;
   font-family: var(--font-display);
@@ -769,6 +775,20 @@
   color: var(--color-accent);
 }
 
+/* -------------------- Фокус с клавиатуры -------------------- */
+
+.calendar__day:focus-visible,
+.slot:focus-visible,
+.button:focus-visible,
+.icon-button:focus-visible,
+.back-link:focus-visible,
+.main-nav__link:focus-visible,
+.site-footer__link:focus-visible,
+.header-actions__phone:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
 /* -------------------- Адаптивность -------------------- */
 
 @media (max-width: 1080px) {
@@ -823,7 +843,7 @@
 
   .booking {
     padding: 24px 20px 32px;
-        gap: 20px;
+    gap: 20px;
   }
 
   .booking__title {
