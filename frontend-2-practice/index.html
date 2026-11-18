@@ -1,14 +1,173 @@
 <!DOCTYPE html>
 <html lang="ru">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Выбор даты и времени</title>
-    <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выбор даты и времени — барбершоп «БРИТВА»</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
   </head>
-  <body>
-    <div class="page">
-      <!-- Перенесите вашу верстку. Удалите статичные данные. Подключите скрипт -->
-    </div>
+  <body class="page">
+    <header class="site-header">
+      <a class="logo" href="#">
+        <span class="logo__mark">Б</span>
+        <span class="logo__text">
+          <span class="logo__title">БРИТВА</span>
+          <span class="logo__subtitle">барбершоп</span>
+        </span>
+      </a>
+
+      <nav class="main-nav" aria-label="Основная навигация">
+        <ul class="main-nav__list">
+          <li class="main-nav__item">
+            <a class="main-nav__link" href="#">Услуги</a>
+          </li>
+          <li class="main-nav__item">
+            <a class="main-nav__link" href="#">Мастера</a>
+          </li>
+          <li class="main-nav__item">
+            <a class="main-nav__link" href="#">Отзывы</a>
+          </li>
+          <li class="main-nav__item">
+            <a class="main-nav__link" href="#">Контакты</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <a class="header-actions__phone" href="tel:+74951234567">+7 (495) 123-45-67</a>
+        <button class="button button--ghost" type="button">Войти</button>
+      </div>
+    </header>
+
+    <main class="booking">
+      <div class="booking__topbar">
+        <a class="back-link" href="#">
+          <span class="back-link__icon" aria-hidden="true">←</span>
+          <span class="back-link__text">К выбору услуги</span>
+        </a>
+
+        <ol class="steps">
+          <li class="steps__item steps__item--done">
+            <span class="steps__bullet">1</span>
+            <span class="steps__label">Услуга</span>
+          </li>
+          <li class="steps__item steps__item--current">
+            <span class="steps__bullet">2</span>
+            <span class="steps__label">Дата и время</span>
+          </li>
+          <li class="steps__item">
+            <span class="steps__bullet">3</span>
+            <span class="steps__label">Подтверждение</span>
+          </li>
+        </ol>
+      </div>
+
+      <div class="booking__headline">
+        <p class="booking__eyebrow">Стрижка · Борода · Бритьё</p>
+        <h1 class="booking__title">Выбор даты и времени</h1>
+        <p class="booking__hint">
+          Свободные слоты отмечены светлым. Занятые — недоступны для записи.
+        </p>
+      </div>
+
+      <div class="booking__columns">
+        <section class="card calendar" aria-labelledby="calendar-title">
+          <header class="calendar__head">
+            <div class="calendar__month-block">
+              <h2 class="calendar__title" id="calendar-title">Ноябрь</h2>
+              <p class="calendar__year">2026</p>
+            </div>
+
+            <div class="calendar__nav">
+              <button
+                class="icon-button"
+                id="prev-month"
+                type="button"
+                aria-label="Предыдущий месяц">
+                ‹
+              </button>
+              <button
+                class="icon-button"
+                id="next-month"
+                type="button"
+                aria-label="Следующий месяц">
+                ›
+              </button>
+            </div>
+          </header>
+
+          <div class="calendar__weekdays">
+            <span class="calendar__weekday">Пн</span>
+            <span class="calendar__weekday">Вт</span>
+            <span class="calendar__weekday">Ср</span>
+            <span class="calendar__weekday">Чт</span>
+            <span class="calendar__weekday">Пт</span>
+            <span class="calendar__weekday">Сб</span>
+            <span class="calendar__weekday">Вс</span>
+          </div>
+
+          <div class="calendar__grid" id="calendar-grid"></div>
+
+          <footer class="calendar__legend">
+            <span class="legend-item">
+              <span class="legend-item__dot legend-item__dot--selected"></span>
+              <span class="legend-item__text">Выбранный день</span>
+            </span>
+            <span class="legend-item">
+              <span class="legend-item__dot legend-item__dot--today"></span>
+              <span class="legend-item__text">Сегодня</span>
+            </span>
+          </footer>
+        </section>
+
+        <section class="card slots" aria-labelledby="slots-title">
+          <header class="slots__head">
+            <div class="slots__head-text">
+              <h2 class="slots__title" id="slots-title">Свободное время</h2>
+              <p class="slots__date" id="slots-date">—</p>
+            </div>
+            <span class="slots__badge" id="slots-badge">0 слотов</span>
+          </header>
+
+          <div class="slots__groups" id="slots-groups"></div>
+
+          <p class="slots__note">
+            Продолжительность визита — 60 минут. Мастер: Алиса Морозова.
+          </p>
+        </section>
+      </div>
+
+      <aside class="summary" aria-label="Итог записи">
+        <div class="summary__info">
+          <p class="summary__label">Ваша запись</p>
+          <p class="summary__value" id="summary-value">
+            <span class="summary__date">Дата не выбрана</span>
+          </p>
+        </div>
+
+        <div class="summary__actions">
+          <p class="summary__price">
+            <span class="summary__price-label">К оплате</span>
+            <span class="summary__price-value">2 400 ₽</span>
+          </p>
+          <button class="button button--primary" type="button" id="next-step">Далее</button>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="site-footer">
+      <p class="site-footer__copy">© 2026 Барбершоп «БРИТВА» · Москва, ул. Тверская, 18</p>
+      <nav class="site-footer__nav" aria-label="Навигация в подвале">
+        <a class="site-footer__link" href="#">Политика конфиденциальности</a>
+        <a class="site-footer__link" href="#">Правила записи</a>
+      </nav>
+    </footer>
+
+    <script src="script.js"></script>
   </body>
 </html>
