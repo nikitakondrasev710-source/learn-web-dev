@@ -1,26 +1,265 @@
 <!DOCTYPE html>
 <html lang="ru">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Выбор даты и времени</title>
-    <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выбор даты и времени — барбершоп «БРИТВА»</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
   </head>
-  <body>
-    <!--
-      ЗАДАНИЕ
-      ========
-      Сверстать страницу выбора даты и времени по своему макету.
+  <body class="page">
+    <header class="site-header">
+      <a class="logo" href="#">
+        <span class="logo__mark">Б</span>
+        <span class="logo__text">
+          <span class="logo__title">БРИТВА</span>
+          <span class="logo__subtitle">барбершоп</span>
+        </span>
+      </a>
 
-      Пока это только вёрстка. Никакого JavaScript — ни кликов,
-      ни переходов, ни выбора дня. Всё статично.
+      <nav class="main-nav" aria-label="Основная навигация">
+        <ul class="main-nav__list">
+          <li class="main-nav__item">
+            <a class="main-nav__link" href="#">Услуги</a>
+          </li>
+          <li class="main-nav__item">
+            <a class="main-nav__link" href="#">Мастера</a>
+          </li>
+          <li class="main-nav__item">
+            <a class="main-nav__link" href="#">Отзывы</a>
+          </li>
+          <li class="main-nav__item">
+            <a class="main-nav__link" href="#">Контакты</a>
+          </li>
+        </ul>
+      </nav>
 
-      Стили пишите в styles.css. Разметку — здесь.
-    -->
+      <div class="header-actions">
+        <a class="header-actions__phone" href="tel:+74951234567">+7 (495) 123-45-67</a>
+        <button class="button button--ghost" type="button">Войти</button>
+      </div>
+    </header>
 
-    <div class="page">
-      <!-- Начните отсюда. Разметьте шапку, основную область
-           с календарём и слотами, подвал. -->
-    </div>
+    <main class="booking">
+      <div class="booking__topbar">
+        <a class="back-link" href="#">
+          <span class="back-link__icon" aria-hidden="true">←</span>
+          <span class="back-link__text">К выбору услуги</span>
+        </a>
+
+        <ol class="steps">
+          <li class="steps__item steps__item--done">
+            <span class="steps__bullet">1</span>
+            <span class="steps__label">Услуга</span>
+          </li>
+          <li class="steps__item steps__item--current">
+            <span class="steps__bullet">2</span>
+            <span class="steps__label">Дата и время</span>
+          </li>
+          <li class="steps__item">
+            <span class="steps__bullet">3</span>
+            <span class="steps__label">Подтверждение</span>
+          </li>
+        </ol>
+      </div>
+
+      <div class="booking__headline">
+        <p class="booking__eyebrow">Стрижка · Борода · Бритьё</p>
+        <h1 class="booking__title">Выбор даты и времени</h1>
+        <p class="booking__hint">
+          Свободные слоты отмечены светлым. Занятые — недоступны для записи.
+        </p>
+      </div>
+
+      <div class="booking__columns">
+        <section class="card calendar" aria-labelledby="calendar-title">
+          <header class="calendar__head">
+            <div class="calendar__month-block">
+              <h2 class="calendar__title" id="calendar-title">Ноябрь</h2>
+              <p class="calendar__year">2026</p>
+            </div>
+
+            <div class="calendar__nav">
+              <button class="icon-button" type="button" aria-label="Предыдущий месяц">
+                ‹
+              </button>
+              <button class="icon-button" type="button" aria-label="Следующий месяц">
+                ›
+              </button>
+            </div>
+          </header>
+
+          <div class="calendar__weekdays">
+            <span class="calendar__weekday">Пн</span>
+            <span class="calendar__weekday">Вт</span>
+            <span class="calendar__weekday">Ср</span>
+            <span class="calendar__weekday">Чт</span>
+            <span class="calendar__weekday">Пт</span>
+            <span class="calendar__weekday">Сб</span>
+            <span class="calendar__weekday">Вс</span>
+          </div>
+
+          <div class="calendar__grid">
+            <span class="calendar__day calendar__day--muted">26</span>
+            <span class="calendar__day calendar__day--muted">27</span>
+            <span class="calendar__day calendar__day--muted">28</span>
+            <span class="calendar__day calendar__day--muted">29</span>
+            <span class="calendar__day calendar__day--muted">30</span>
+            <span class="calendar__day calendar__day--muted">31</span>
+            <span class="calendar__day">1</span>
+
+            <span class="calendar__day">2</span>
+            <span class="calendar__day">3</span>
+            <span class="calendar__day">4</span>
+            <span class="calendar__day">5</span>
+            <span class="calendar__day">6</span>
+            <span class="calendar__day">7</span>
+            <span class="calendar__day">8</span>
+
+            <span class="calendar__day">9</span>
+            <span class="calendar__day">10</span>
+            <span class="calendar__day">11</span>
+            <span class="calendar__day calendar__day--today">12</span>
+            <span class="calendar__day">13</span>
+            <span class="calendar__day">14</span>
+            <span class="calendar__day">15</span>
+
+            <span class="calendar__day">16</span>
+            <span class="calendar__day">17</span>
+            <span class="calendar__day calendar__day--selected">18</span>
+            <span class="calendar__day">19</span>
+            <span class="calendar__day">20</span>
+            <span class="calendar__day">21</span>
+            <span class="calendar__day">22</span>
+
+            <span class="calendar__day">23</span>
+            <span class="calendar__day">24</span>
+            <span class="calendar__day">25</span>
+            <span class="calendar__day">26</span>
+            <span class="calendar__day">27</span>
+            <span class="calendar__day">28</span>
+            <span class="calendar__day">29</span>
+
+            <span class="calendar__day">30</span>
+            <span class="calendar__day calendar__day--muted">1</span>
+            <span class="calendar__day calendar__day--muted">2</span>
+            <span class="calendar__day calendar__day--muted">3</span>
+            <span class="calendar__day calendar__day--muted">4</span>
+            <span class="calendar__day calendar__day--muted">5</span>
+            <span class="calendar__day calendar__day--muted">6</span>
+          </div>
+
+          <footer class="calendar__legend">
+            <span class="legend-item">
+              <span class="legend-item__dot legend-item__dot--selected"></span>
+              <span class="legend-item__text">Выбранный день</span>
+            </span>
+            <span class="legend-item">
+              <span class="legend-item__dot legend-item__dot--today"></span>
+              <span class="legend-item__text">Сегодня</span>
+            </span>
+          </footer>
+        </section>
+
+        <section class="card slots" aria-labelledby="slots-title">
+          <header class="slots__head">
+            <div class="slots__head-text">
+              <h2 class="slots__title" id="slots-title">Свободное время</h2>
+              <p class="slots__date">Среда, 18 ноября</p>
+            </div>
+            <span class="slots__badge">8 слотов</span>
+          </header>
+
+          <div class="slots__group">
+            <h3 class="slots__group-title">Утро</h3>
+            <ul class="slots__list">
+              <li class="slots__item">
+                <button class="slot slot--busy" type="button" disabled>09:00</button>
+              </li>
+              <li class="slots__item">
+                <button class="slot" type="button">10:00</button>
+              </li>
+              <li class="slots__item">
+                <button class="slot" type="button">11:00</button>
+              </li>
+              <li class="slots__item">
+                <button class="slot slot--busy" type="button" disabled>12:00</button>
+              </li>
+            </ul>
+          </div>
+
+          <div class="slots__group">
+            <h3 class="slots__group-title">День</h3>
+            <ul class="slots__list">
+              <li class="slots__item">
+                <button class="slot" type="button">13:00</button>
+              </li>
+              <li class="slots__item">
+                <button class="slot slot--active" type="button">14:00</button>
+              </li>
+              <li class="slots__item">
+                <button class="slot" type="button">15:00</button>
+              </li>
+              <li class="slots__item">
+                <button class="slot" type="button">16:00</button>
+              </li>
+            </ul>
+          </div>
+
+          <div class="slots__group">
+            <h3 class="slots__group-title">Вечер</h3>
+            <ul class="slots__list">
+              <li class="slots__item">
+                <button class="slot" type="button">17:00</button>
+              </li>
+              <li class="slots__item">
+                <button class="slot slot--busy" type="button" disabled>18:00</button>
+              </li>
+              <li class="slots__item">
+                <button class="slot" type="button">19:00</button>
+              </li>
+              <li class="slots__item">
+                <button class="slot slot--busy" type="button" disabled>20:00</button>
+              </li>
+            </ul>
+          </div>
+
+          <p class="slots__note">
+            Продолжительность визита — 60 минут. Мастер: Алиса Морозова.
+          </p>
+        </section>
+      </div>
+
+      <aside class="summary" aria-label="Итог записи">
+        <div class="summary__info">
+          <p class="summary__label">Ваша запись</p>
+          <p class="summary__value">
+            <span class="summary__date">18 ноября, среда</span>
+            <span class="summary__divider">·</span>
+            <span class="summary__time">14:00</span>
+          </p>
+        </div>
+
+        <div class="summary__actions">
+          <p class="summary__price">
+            <span class="summary__price-label">К оплате</span>
+            <span class="summary__price-value">2 400 ₽</span>
+          </p>
+          <button class="button button--primary" type="button">Далее</button>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="site-footer">
+      <p class="site-footer__copy">© 2026 Барбершоп «БРИТВА» · Москва, ул. Тверская, 18</p>
+      <nav class="site-footer__nav" aria-label="Навигация в подвале">
+        <a class="site-footer__link" href="#">Политика конфиденциальности</a>
+        <a class="site-footer__link" href="#">Правила записи</a>
+      </nav>
+    </footer>
   </body>
 </html>
