@@ -62,12 +62,21 @@ python check_api.py   # автопроверка: 35 passed
 Решения по заданиям модуля Тестирование лежат в папках `testing-N-practice`:
 тест-планы, чек-листы, тест-кейсы, баг-репорты и отчёты о тестировании.
 
-| Папка | Задание |
+| Папка | Задание | Что внутри |
+|---|---|---|
+| `testing-1-practice/` | Задание 1 — виды тестирования и тест-план | `README.md`: объект, виды тестов, окружение, критерии, риски |
+| `testing-2-practice/` | Задание 2 — чек-лист и тест-кейсы | `README.md`: чек-лист на 37 пунктов, тест-кейсы TC-01…TC-15 |
+| `testing-3-practice/` | Задание 3 — баг-репорты | `README.md`: 8 баг-репортов (BUG-001…BUG-008) |
+| `testing-4-practice/` | Задание 4 — декомпозиция, матрица покрытия, отчёт | `decomposition.md`, `decomposition.drawio`, `traceability-matrix.md`, `README.md` — отчёт |
+
+Задание 4 (финальное по тестированию) состоит из четырёх частей:
+
+| Часть | Файл |
 |---|---|
-| `testing-1-practice/README.md` | Задание 1 |
-| `testing-2-practice/` | Задание 2 |
-| `testing-3-practice/README.md` | Задание 3 |
-| `testing-4-practice/` | Задание 4 |
+| Декомпозиция функционала и требования REQ-01…REQ-68 | `testing-4-practice/decomposition.md` |
+| Карта функционала (открыть в draw.io) | `testing-4-practice/decomposition.drawio` |
+| Матрица покрытия, пробелы, дописанные TC-16…TC-31 | `testing-4-practice/traceability-matrix.md` |
+| Smoke-проверка, критерии завершения, отчёт о тестировании | `testing-4-practice/README.md` |
 
 ---
 
