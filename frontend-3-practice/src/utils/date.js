@@ -97,15 +97,29 @@ export function getFirstSelectableDay(year, month, today) {
   return null;
 }
 
+// Есть ли число, которое можно показать (null = дата не выбрана).
+export function hasDay(day) {
+  return Number.isInteger(day) && day >= 1 && day <= 31;
+}
+
 // «Среда, 18 ноября 2026»
 export function formatFullDate(year, month, day) {
+  if (!hasDay(day)) return 'дата не выбрана';
   const weekday = WEEKDAY_NAMES[new Date(year, month, day).getDay()];
   return `${weekday}, ${day} ${MONTH_NAMES_GENITIVE[month]} ${year}`;
 }
 
 // «18 ноября»
 export function formatShortDate(month, day) {
+  if (!hasDay(day)) return 'дата не выбрана';
   return `${day} ${MONTH_NAMES_GENITIVE[month]}`;
+}
+
+// «среда, 18 ноября 2026» — для нижней панели, где важен день недели и год.
+export function formatDateWithWeekday(year, month, day) {
+  if (!hasDay(day)) return 'Дата не выбрана';
+  const weekday = WEEKDAY_NAMES[new Date(year, month, day).getDay()].toLowerCase();
+  return `${weekday}, ${day} ${MONTH_NAMES_GENITIVE[month]} ${year}`;
 }
 
 // Склонение слова «слот».

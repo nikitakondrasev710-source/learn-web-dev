@@ -136,6 +136,10 @@
 
           <div class="slots__groups" id="slots-groups"></div>
 
+          <p class="slots__empty" id="slots-empty" hidden>
+            Выберите день в календаре — для прошедшей даты записаться нельзя.
+          </p>
+
           <p class="slots__note">
             Продолжительность визита — 60 минут. Мастер: Алиса Морозова.
           </p>
@@ -155,7 +159,14 @@
             <span class="summary__price-label">К оплате</span>
             <span class="summary__price-value">2 400 ₽</span>
           </p>
-          <button class="button button--primary" type="button" id="next-step">Далее</button>
+          <button
+            class="button button--primary"
+            type="button"
+            id="next-step"
+            disabled
+            aria-disabled="true">
+            Далее
+          </button>
         </div>
       </aside>
     </main>

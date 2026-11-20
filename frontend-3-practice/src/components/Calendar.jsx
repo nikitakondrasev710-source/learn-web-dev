@@ -1,11 +1,4 @@
-import {
-  MONTH_NAMES,
-  WEEKDAY_NAMES,
-  buildCalendarGrid,
-  isSelectable,
-} from '../utils/date.js';
-
-const WEEKDAYS_SHORT = WEEKDAY_NAMES.map((name) => name.slice(0, 2));
+import { MONTH_NAMES, buildCalendarGrid, isSelectable } from '../utils/date.js';
 
 // Календарь на текущий месяц.
 // Получает состояние и колбэки — сам ничего не хранит.

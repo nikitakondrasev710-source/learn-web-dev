@@ -1,8 +1,9 @@
 import { countAvailable } from '../data/slots.js';
-import { formatFullDate, pluralSlots } from '../utils/date.js';
+import { formatFullDate, hasDay, pluralSlots } from '../utils/date.js';
 
 // Блок со слотами времени.
-// Слоты приходят пропсом groups, выбранное время — selectedTime.
+// Слоты приходят пропсом groups и уже посчитаны под выбранную дату:
+// прошедшие часы и занятое время помечены как недоступные.
 function SlotsPanel({
   groups,
   year,
@@ -11,6 +12,7 @@ function SlotsPanel({
   selectedTime,
   onSelectTime,
 }) {
+  const daySelected = hasDay(selectedDay);
   const available = countAvailable(groups);
 
   return (
@@ -20,7 +22,11 @@ function SlotsPanel({
           <h2 className="slots__title" id="slots-title">
             Свободное время
           </h2>
-          <p className="slots__date">{formatFullDate(year, month, selectedDay)}</p>
+          <p className="slots__date">
+            {daySelected
+              ? formatFullDate(year, month, selectedDay)
+              : 'Выберите день в календаре'}
+          </p>
         </div>
         <span className="slots__badge">
           {available} {pluralSlots(available)}
@@ -57,6 +63,12 @@ function SlotsPanel({
           </div>
         ))}
       </div>
+
+      {!daySelected && (
+        <p className="slots__empty">
+          В этом месяце записаться уже нельзя — вернитесь к актуальному месяцу.
+        </p>
+      )}
 
       <p className="slots__note">
         Продолжительность визита — 60 минут. Мастер: Алиса Морозова.

@@ -12,9 +12,16 @@
 // 1. ДАННЫЕ
 // ============================================================
 
-// «Сегодня» — захардкожено для стабильной проверки задания.
-// Что взять текущую дату, раскомментируйте строку с new Date().
-const TODAY = { year: 2026, month: 10, day: 19 }; // month: 0 = январь, 10 = ноябрь
+// «Сегодня» — реальная текущая дата на момент загрузки страницы.
+// Берём её из new Date(): с фиксированной датой прошедшие дни
+// перестают блокироваться, как только наступает следующий день.
+// month — 0-индексный, как в Date: 0 = январь, 10 = ноябрь.
+const NOW = new Date();
+const TODAY = {
+  year: NOW.getFullYear(),
+  month: NOW.getMonth(),
+  day: NOW.getDate(),
+};
 
 const MONTH_NAMES = [
   'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
@@ -69,8 +76,9 @@ const SLOT_GROUPS = [
 const state = {
   year: TODAY.year,
   month: TODAY.month,
-  selectedDay: TODAY.day,
+  selectedDay: TODAY.day, // null — дату выбрать нельзя (месяц уже прошёл)
   selectedTime: null,
+  confirmed: false, // запись подтверждена кнопкой «Далее»
 };
 
 // ============================================================
@@ -122,15 +130,67 @@ function isSelectable(year, month, day) {
   return compareDates({ year, month, day }, TODAY) >= 0;
 }
 
+// Первый день месяца, который можно выбрать.
+// Если весь месяц уже в прошлом — возвращает null: выбирать нечего.
+function getFirstSelectableDay(year, month) {
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  for (let day = 1; day <= daysInMonth; day++) {
+    if (isSelectable(year, month, day)) return day;
+  }
+  return null;
+}
+
+// Выбрана ли сейчас допустимая (не прошедшая) дата.
+function hasValidSelection() {
+  return (
+    state.selectedDay !== null &&
+    isSelectable(state.year, state.month, state.selectedDay)
+  );
+}
+
+// «Сейчас» в формате «ЧЧ:ММ» — нужно, чтобы блокировать прошедшие часы.
+function currentTimeString() {
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2, '0');
+  const mm = String(now.getMinutes()).padStart(2, '0');
+  return `${hh}:${mm}`;
+}
+
+// Выбранный день — это сегодня?
+function isSelectedToday() {
+  return (
+    hasValidSelection() &&
+    state.year === TODAY.year &&
+    state.month === TODAY.month &&
+    state.selectedDay === TODAY.day
+  );
+}
+
+// Слот уже прошёл: записаться на прошедшее время сегодня нельзя.
+function isSlotInPast(time) {
+  return isSelectedToday() && time <= currentTimeString();
+}
+
+// Доступен ли слот: он есть в расписании, свободен и ещё не прошёл.
+function isSlotAvailable(time) {
+  if (!time || !hasValidSelection() || isSlotInPast(time)) return false;
+
+  return SLOT_GROUPS.some((group) =>
+    group.slots.some((slot) => slot.time === time && slot.available)
+  );
+}
+
 // Форматирование даты для нижней панели: «Среда, 18 ноября 2026».
 function formatFullDate(year, month, day) {
   const weekday = WEEKDAY_NAMES[new Date(year, month, day).getDay()];
   return `${weekday}, ${day} ${MONTH_NAMES_GENITIVE[month]} ${year}`;
 }
 
-// Короткая форма: «18 ноября».
-function formatShortDate(month, day) {
-  return `${day} ${MONTH_NAMES_GENITIVE[month]}`;
+// Дата с днём недели и годом: «Среда, 18 ноября 2026».
+// Если дата не выбрана — так и пишем в нижней панели.
+function formatDateWithWeekday(year, month, day) {
+  if (day === null || day === undefined) return 'Дата не выбрана';
+  return formatFullDate(year, month, day);
 }
 
 // Склонение слова «слот».
@@ -142,10 +202,16 @@ function pluralSlots(n) {
   return 'слотов';
 }
 
-// Количество свободных слотов.
+// Количество свободных слотов на выбранную дату.
+// Если допустимой даты нет — свободных слотов тоже нет.
 function countAvailable() {
+  if (!hasValidSelection()) return 0;
+
   return SLOT_GROUPS.reduce(
-    (sum, group) => sum + group.slots.filter((s) => s.available).length,
+    (sum, group) =>
+      sum +
+      group.slots.filter((slot) => slot.available && !isSlotInPast(slot.time))
+        .length,
     0
   );
 }
@@ -160,7 +226,9 @@ const yearEl = document.querySelector('.calendar__year');
 const slotsGroupsEl = document.getElementById('slots-groups');
 const slotsDateEl = document.getElementById('slots-date');
 const slotsBadgeEl = document.getElementById('slots-badge');
+const slotsEmptyEl = document.getElementById('slots-empty');
 const summaryValueEl = document.getElementById('summary-value');
+const nextStepBtn = document.getElementById('next-step');
 
 // Рисует календарь на текущий месяц из состояния.
 function renderCalendar() {
@@ -188,10 +256,7 @@ function renderCalendar() {
         ) {
           classes.push('calendar__day--today');
         }
-        if (
-          !cell.otherMonth &&
-          state.selectedDay === cell.day
-        ) {
+        if (state.selectedDay === cell.day) {
           classes.push('calendar__day--selected');
         }
       }
@@ -210,9 +275,11 @@ function renderCalendar() {
 }
 
 // Обновляет заголовок блока слотов и счётчик.
+// Если допустимой даты нет — так и пишем в заголовке.
 function renderSlotsHeader() {
-  const dateLabel = formatFullDate(state.year, state.month, state.selectedDay);
-  slotsDateEl.textContent = dateLabel;
+  slotsDateEl.textContent = hasValidSelection()
+    ? formatFullDate(state.year, state.month, state.selectedDay)
+    : 'Дата не выбрана';
 
   const available = countAvailable();
   slotsBadgeEl.textContent = `${available} ${pluralSlots(available)}`;
@@ -228,15 +295,19 @@ function renderSlots() {
     html += '<ul class="slots__list">';
 
     group.slots.forEach((slot) => {
+      // Слот кликабелен, только если день допустимый, слот свободен
+      // и его время ещё не прошло (для сегодняшнего дня).
+      const enabled = isSlotAvailable(slot.time);
+
       const classes = ['slot'];
-      if (!slot.available) {
+      if (!enabled) {
         classes.push('slot--busy');
       } else if (state.selectedTime === slot.time) {
         classes.push('slot--active');
       }
 
-      const disabled = !slot.available ? ' disabled' : '';
-      const dataAttr = slot.available ? ` data-time="${slot.time}"` : '';
+      const disabled = enabled ? '' : ' disabled';
+      const dataAttr = enabled ? ` data-time="${slot.time}"` : '';
 
       html += '<li class="slots__item">';
       html += `<button class="${classes.join(' ')}" type="button"${dataAttr}${disabled}>${slot.time}</button>`;
@@ -249,11 +320,29 @@ function renderSlots() {
 
   slotsGroupsEl.innerHTML = html;
   attachSlotHandlers();
+
+  // Подсказка вместо пустой сетки: слотов нет, потому что нет даты.
+  if (slotsEmptyEl) {
+    slotsEmptyEl.hidden = hasValidSelection();
+  }
 }
 
-// Обновляет нижнюю панель.
+// Обновляет нижнюю панель: день недели, число, месяц, год и время.
 function renderSummary() {
-  const datePart = formatShortDate(state.month, state.selectedDay);
+  const datePart = formatDateWithWeekday(
+    state.year,
+    state.month,
+    state.selectedDay
+  );
+
+  if (state.confirmed && state.selectedTime) {
+    summaryValueEl.innerHTML =
+      '<span class="summary__label-inline">Запись подтверждена:</span>' +
+      `<span class="summary__date">${datePart}</span>` +
+      '<span class="summary__divider">·</span>' +
+      `<span class="summary__time">${state.selectedTime}</span>`;
+    return;
+  }
 
   if (state.selectedTime) {
     summaryValueEl.innerHTML =
@@ -268,12 +357,32 @@ function renderSummary() {
   }
 }
 
+// Состояние кнопки «Далее»: пока не выбраны дата и время — она заблокирована.
+function renderNextStepButton() {
+  if (!nextStepBtn) return;
+
+  const ready = hasValidSelection() && Boolean(state.selectedTime);
+  nextStepBtn.disabled = !ready;
+  nextStepBtn.setAttribute('aria-disabled', String(!ready));
+
+  if (state.confirmed) {
+    nextStepBtn.textContent = 'Запись подтверждена';
+  } else if (!hasValidSelection()) {
+    nextStepBtn.textContent = 'Выберите дату';
+  } else if (!state.selectedTime) {
+    nextStepBtn.textContent = 'Выберите время';
+  } else {
+    nextStepBtn.textContent = 'Далее';
+  }
+}
+
 // Полная перерисовка страницы.
 function renderAll() {
   renderCalendar();
   renderSlotsHeader();
   renderSlots();
   renderSummary();
+  renderNextStepButton();
 }
 
 // Обработчик клика по дню.
@@ -281,8 +390,12 @@ function onDayClick(event) {
   const day = parseInt(event.currentTarget.dataset.day, 10);
   if (!day) return;
 
+  // Прошедший день выбрать нельзя, даже если по нему кликнули.
+  if (!isSelectable(state.year, state.month, day)) return;
+
   state.selectedDay = day;
   state.selectedTime = null; // обязательно сбрасываем время
+  state.confirmed = false; // и снимаем прошлое подтверждение
 
   renderAll();
 }
@@ -292,10 +405,35 @@ function onSlotClick(event) {
   const time = event.currentTarget.dataset.time;
   if (!time) return;
 
+  // Занятое, прошедшее время или дата без выборa — не даём записаться.
+  if (!isSlotAvailable(time)) return;
+
   state.selectedTime = state.selectedTime === time ? null : time;
+  state.confirmed = false;
 
   renderSlots();
   renderSummary();
+  renderNextStepButton();
+}
+
+// Обработчик кнопки «Далее»: подтверждаем запись на выбранные дату и время.
+function onNextStep() {
+  // Страховка: кнопка заблокирована, но проверяем полный выбор и здесь.
+  if (!hasValidSelection() || !state.selectedTime) {
+    renderNextStepButton();
+    return;
+  }
+
+  if (!isSlotAvailable(state.selectedTime)) {
+    state.selectedTime = null;
+    renderAll();
+    return;
+  }
+
+  state.confirmed = true;
+
+  renderSummary();
+  renderNextStepButton();
 }
 
 // Навешивает обработчики на дни календаря после перерисовки.
@@ -339,21 +477,28 @@ function onNextMonth() {
   renderAll();
 }
 
-// При смене месяца держим выбор в допустимых границах:
-// нельзя оставаться на прошедшем дне.
+// При смене месяца держим выбор в допустимых границах.
+// Первое число прошедшего месяца недоступно, поэтому если выбирать
+// нечего — сбрасываем день в null, а не подставляем 1.
 function clampSelectionToMonth() {
   const daysInMonth = new Date(state.year, state.month + 1, 0).getDate();
 
-  if (state.selectedDay > daysInMonth) {
+  // Такого числа в этом месяце нет (например, было 31, стал февраль).
+  if (state.selectedDay !== null && state.selectedDay > daysInMonth) {
     state.selectedDay = daysInMonth;
   }
 
-  if (!isSelectable(state.year, state.month, state.selectedDay)) {
-    // Если весь месяц в прошлом — переносим выбор на первое число.
-    state.selectedDay = 1;
+  // Выбранный день оказался в прошлом — берём первый допустимый,
+  // а если месяц целиком прошёл — null (дата не выбрана).
+  if (
+    state.selectedDay === null ||
+    !isSelectable(state.year, state.month, state.selectedDay)
+  ) {
+    state.selectedDay = getFirstSelectableDay(state.year, state.month);
   }
 
   state.selectedTime = null;
+  state.confirmed = false;
 }
 
 // ============================================================
@@ -362,5 +507,6 @@ function clampSelectionToMonth() {
 
 document.getElementById('prev-month').addEventListener('click', onPrevMonth);
 document.getElementById('next-month').addEventListener('click', onNextMonth);
+nextStepBtn.addEventListener('click', onNextStep);
 
 renderAll();

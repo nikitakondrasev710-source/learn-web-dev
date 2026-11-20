@@ -188,6 +188,19 @@
   color: var(--color-ink);
 }
 
+.button:disabled,
+.button[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.55;
+  box-shadow: none;
+  transform: none;
+}
+
+.button:disabled:hover,
+.button[aria-disabled='true']:hover {
+  transform: none;
+}
+
 .button--primary {
   background-color: var(--color-accent);
   color: #fff;
@@ -199,6 +212,18 @@
   background-color: #9d4623;
   box-shadow: 0 14px 26px rgba(180, 85, 45, 0.34);
   transform: translateY(-1px);
+}
+
+.button--primary:disabled,
+.button--primary[aria-disabled='true'] {
+  background-color: #6f6459;
+  color: rgba(247, 244, 239, 0.75);
+}
+
+.button--primary:disabled:hover,
+.button--primary[aria-disabled='true']:hover {
+  background-color: #6f6459;
+  box-shadow: none;
 }
 
 /* -------------------- Основная область -------------------- */
@@ -676,6 +701,15 @@
   border-color: transparent;
   color: var(--color-ink-faint);
   box-shadow: none;
+}
+
+.slots__empty {
+  margin: 0;
+  padding: 16px 18px;
+  border-radius: var(--radius-control);
+  background-color: var(--color-busy);
+  font-size: 14px;
+  color: var(--color-ink-soft);
 }
 
 .slots__note {
