@@ -39,9 +39,11 @@ HTML и CSS. Страница «Выбор даты и времени» по с�
 | Папка | Задание | Что внутри |
 |---|---|---|
 | `backend-1-practice/solution.py` | Задание 1 — основы Python | Синтаксис, коллекции, функции, dataclass, обработка ошибок |
+| `backend-1-practice/README.md` | — | Описание разделов и ожидаемый вывод |
 | `backend-2-practice/solution.py` | Задание 2 — Web API на FastAPI | REST API: услуги, мастера, записи; GET/POST/DELETE, валидация, коды ответов |
 | `backend-3-practice/solution.py` | Задание 3 — SQLAlchemy и Alembic | Модели, связи, миграции, запросы через ORM |
 | `backend-4-practice/solution.py` | Задание 4 — Pydantic | APIRouter, схемы, кастомные валидаторы, бизнес-правила |
+| `backend-4-practice/README.md` | — | Схемы, валидаторы, роутеры, отличия от backend-2 |
 
 В каждой папке есть свой `README.md` с инструкцией по запуску.
 

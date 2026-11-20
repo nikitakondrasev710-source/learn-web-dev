@@ -160,12 +160,28 @@ SM-2…SM-6 — дефект фиксируется, полное тестиро
 
 ### 3.4 Сборка и запуск
 
-| Проект | Сборка | Консоль |
+Все проверки выполнены 20.11.2026 на чистом окружении.
+
+| Проект | Команда | Результат |
 |---|---|---|
-| `frontend-3-practice` | Vite 8.2.1, OK | Ошибок нет |
-| `frontend-4-practice` | Vite 8.2.1, OK | Ошибок нет |
-| `backend-2-practice` | FastAPI 0.165 | OK |
-| `backend-4-practice` | FastAPI 0.165 | OK |
+| `frontend-1-practice` | открыть `index.html` | Открывается, стили загружаются |
+| `frontend-2-practice` | открыть `index.html` | Работает, ошибок в консоли нет |
+| `frontend-3-practice` | `npm run build` | `✓ built in 167 ms` |
+| `frontend-4-practice` | `npm run build` | `✓ built in 152 ms` |
+| `backend-1-practice` | `python solution.py` | Работает, вывод корректен |
+| `backend-2-practice` | `python check_api.py` | `35 passed, 0 failed` |
+| `backend-3-practice` | `python solution.py` | Работает, 3 категории / 6 услуг / 3 мастера / 2 записи |
+| `backend-4-practice` | `python check_pydantic.py` | `29 passed, 0 failed` |
+
+**Найдено при этой проверке:**
+
+- BUG-007 (сборка Vite) на самом деле был не исправлен,
+  а обойдён запуском из другой папки. Исправлен в `vite.config.js`
+  обоих проектов — теперь `npm run build` работает всегда.
+- `backend-1` и `backend-3` падали на Windows с `UnicodeEncodeError`
+  при печати «₽» в консоль cp1251. Добавлен перевод stdout в UTF-8.
+- `backend-3`: команда `alembic upgrade head` из README не работала —
+  не было `alembic.ini`. Файл создан.
 | `backend-3-practice` | SQLAlchemy, SQLite | OK |
 
 ---
@@ -181,6 +197,23 @@ SM-2…SM-6 — дефект фиксируется, полное тестиро
 
 **Исправлено 7, открыт 1** (BUG-008 — принят как риск,
 актуален только при переходе на реальную СУБД с конкурентными запросами).
+
+### 4.1 Баг-репорты приоритетов p1 и p2
+
+Соответствие шкал: **p1** = Blocker + Critical, **p2** = Major.
+Подробные баг-репорты — в
+[`testing-3-practice/README.md`](../testing-3-practice/README.md).
+
+| ID | Приоритет | Шкала | Название | Статус |
+|---|---|---|---|---|
+| BUG-007 | Blocker | **p1** | Ошибка сборки Vite: посторонний PostCSS-конфиг | Исправлен |
+| BUG-001 | Major | **p2** | При листании месяца назад выбранным остаётся прошедший день | Исправлен |
+| BUG-003 | Major | **p2** | Занятые слоты не различимы без наведения | Исправлен |
+| BUG-004 | Major | **p2** | Нет реакции на наведение у кликабельных элементов | Исправлен |
+| BUG-008 | Major | **p2** | Повторная отправка возможна при двойном клике | Открыт (риск) |
+
+p1 — 1 дефект, p2 — 4 дефекта. Остальные три (BUG-002, 005, 006)
+имеют приоритет Minor и в p1/p2 не входят.
 
 Подробно — в `testing-3-practice/README.md`.
 

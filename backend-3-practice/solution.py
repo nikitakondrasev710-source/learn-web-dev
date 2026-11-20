@@ -8,10 +8,19 @@
 Запуск:
     pip install sqlalchemy alembic
     python solution.py          # создаёт salon.db и наполняет данными
-    alembic upgrade head        # применяет миграции (см. alembic/)
+    alembic upgrade head        # применяет миграции (см. migrations/, alembic.ini)
+
+На Windows консоль работает в cp1251 и не умеет печатать «₽» —
+stdout переключается на UTF-8.
 """
 
+import sys
+
 from datetime import date, datetime, time, timedelta
+
+# Консоль Windows (cp1251) не поддерживает символ «₽» — переключаем вывод.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 from sqlalchemy import (
     Boolean,

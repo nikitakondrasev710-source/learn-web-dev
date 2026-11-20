@@ -7,10 +7,19 @@ f-строки, обработка ошибок и работа с датами.
 
 Запуск:
     python solution.py
+
+На Windows консоль по умолчанию открывается в cp1251 и не умеет
+печатать «₽». Поэтому stdout принудительно переводится в UTF-8.
 """
+
+import sys
 
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
+
+# Консоль Windows (cp1251) не поддерживает символ «₽» — переключаем вывод.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 
 # ---------------------------------------------------------------
