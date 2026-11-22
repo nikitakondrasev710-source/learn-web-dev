@@ -70,7 +70,7 @@ python check_api.py   # автопроверка: 35 passed
 | `testing-1-practice/` | Задание 1 — виды тестирования и тест-план | `README.md`: пользовательский сценарий, источники требований, виды тестов, окружение, критерии, риски |
 | `testing-2-practice/` | Задание 2 — чек-лист и тест-кейсы | `README.md`: чек-лист на 37 пунктов, тест-кейсы TC-01…TC-15 |
 | `testing-3-practice/` | Задание 3 — баг-репорты | `README.md`: 12 баг-репортов (BUG-001…BUG-012) |
-| `testing-4-practice/` | Задание 4 — декомпозиция, матрица покрытия, сессия, отчёт | `decomposition.md`, `decomposition.drawio`, `traceability-matrix.md`, `exploratory-session.md`, `README.md` — отчёт |
+| `testing-4-practice/` | Задание 4 — декомпозиция, матрица покрытия, сессия, отчёт | `decomposition.md`, `traceability-matrix.md`, `exploratory-session.md`, `README.md` — отчёт |
 
 Задание 4 (финальное по тестированию) состоит из четырёх частей:
 
@@ -78,7 +78,6 @@ python check_api.py   # автопроверка: 35 passed
 |---|---|
 | Декомпозиция функционала и требования REQ-01…REQ-81 | `testing-4-practice/decomposition.md` |
 | Реестр неоднозначностей AMB-01…AMB-07 и источники требований | `testing-4-practice/decomposition.md`, раздел 0 |
-| Карта функционала (открыть в draw.io) | `testing-4-practice/decomposition.drawio` |
 | Матрица покрытия, пробелы, дописанные TC-16…TC-40 | `testing-4-practice/traceability-matrix.md` |
 | Исследовательская сессия (exploratory, ad-hoc), BUG-009…BUG-012 | `testing-4-practice/exploratory-session.md` |
 | Smoke-проверка, критерии завершения, метрики (Failure Rate, Test Efficiency), роли и процесс, отчёт | `testing-4-practice/README.md` |
@@ -90,11 +89,11 @@ python check_api.py   # автопроверка: 35 passed
 Макеты интерфейса собраны в Figma, ссылка на прототип приложена к заданию в LMS.
 
 Макет «БРИТВА — путь записи клиента» — **эталон для тестирования**:
-6 основных экранов (Главная, Услуги, Мастер, Дата и время, Подтверждение,
-Успех) и 3 альтернативных (ошибка телефона, слот занят, ошибка сети).
-Требования REQ-69…REQ-81 в `testing-4-practice/decomposition.md`
-сформулированы по этому макету, расхождения реализации с макетом
-оформлены как BUG-009…BUG-012.
+шесть основных экранов (Главная, Услуги, Мастер, Дата и время,
+Подтверждение, Успех) и три альтернативных (ошибка телефона,
+слот занят, ошибка сети). По нему сформулированы требования
+REQ-69…REQ-81 в `testing-4-practice/decomposition.md`; расхождения
+реализации с макетом — BUG-009…BUG-012.
 
 ---
 
