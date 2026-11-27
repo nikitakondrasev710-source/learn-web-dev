@@ -76,7 +76,7 @@ python check_api.py   # автопроверка: 35 passed
 
 | Часть | Файл |
 |---|---|
-| Декомпозиция функционала и требования REQ-01…REQ-82 | `testing-4-practice/decomposition.md` |
+| Декомпозиция функционала и требования REQ-01…REQ-81 | `testing-4-practice/decomposition.md` |
 | Реестр неоднозначностей AMB-01…AMB-07 и источники требований | `testing-4-practice/decomposition.md`, раздел 0 |
 | Матрица покрытия, пробелы, дописанные TC-16…TC-40 | `testing-4-practice/traceability-matrix.md` |
 | Исследовательская сессия (exploratory, ad-hoc), BUG-009…BUG-012 | `testing-4-practice/exploratory-session.md` |
