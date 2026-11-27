@@ -15,7 +15,7 @@ f-строки, обработка ошибок и работа с датами.
 import sys
 
 from dataclasses import dataclass, field
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, time, timedelta
 
 # Консоль Windows (cp1251) не поддерживает символ «₽» — переключаем вывод.
 if hasattr(sys.stdout, "reconfigure"):
@@ -161,8 +161,9 @@ appointments: list[Appointment] = []
 
 def book(appointment: Appointment) -> Appointment:
     """Создаёт запись, проверяя занятость времени у мастера."""
-    # Услуга существует?
-    appointment.service
+    service = find_service(appointment.service_id)
+    if service is None:
+        raise SlotBusyError(f"Услуга {appointment.service_id} не найдена")
 
     # Мастер умеет делать эту услугу?
     if appointment.master not in masters:
@@ -174,9 +175,17 @@ def book(appointment: Appointment) -> Appointment:
             f"{appointment.service['title']}"
         )
 
-    # Время в рабочих часах?
-    if not (WORKING_HOURS[0] <= appointment.starts_at.hour < WORKING_HOURS[1]):
-        raise SlotBusyError("Запись вне рабочих часов")
+    # Время и вся длительность услуги должны помещаться в рабочий день.
+    working_start = datetime.combine(
+        appointment.starts_at.date(), time(WORKING_HOURS[0], 0)
+    )
+    working_end = datetime.combine(
+        appointment.starts_at.date(), time(WORKING_HOURS[1], 0)
+    )
+    if appointment.starts_at < working_start or appointment.ends_at > working_end:
+        raise SlotBusyError(
+            "Запись должна полностью находиться в рабочих часах (09:00–21:00)"
+        )
 
     # Не в прошлом?
     if appointment.starts_at < datetime.now():
@@ -237,23 +246,42 @@ for number, appointment in enumerate(appointments, start=1):
 # 7. Генератор свободных слотов (пригодится в следующих заданиях)
 # ---------------------------------------------------------------
 
-def free_slots(master: str, day: date, step_minutes: int = 30) -> list[str]:
-    """Возвращает список свободных времён мастера на день."""
-    busy = [
-        a for a in appointments
-        if a.master == master and a.starts_at.date() == day
-    ]
+def free_slots(
+    master: str,
+    day: date,
+    step_minutes: int = 30,
+    service_id: int = 1,
+) -> list[str]:
+    """Возвращает свободное время мастера с учётом длительности услуги."""
+    if type(step_minutes) is not int or step_minutes <= 0:
+        raise ValueError("step_minutes должен быть положительным целым числом")
 
+    if master not in masters:
+        raise ValueError(f"Мастер {master} не найден")
+
+    service = find_service(service_id)
+    if service is None:
+        raise ValueError(f"Услуга {service_id} не найдена")
+    if service_id not in masters[master]:
+        raise ValueError(f"Мастер {master} не оказывает услугу {service['title']}")
+
+    duration = service["duration"]
+    day_start = datetime.combine(day, time(WORKING_HOURS[0], 0))
+    day_end = datetime.combine(day, time(WORKING_HOURS[1], 0))
+    now = datetime.now()
     result = []
-    current = datetime(day.year, day.month, day.day, WORKING_HOURS[0], 0)
-    end = datetime(day.year, day.month, day.day, WORKING_HOURS[1], 0)
+    current = day_start
 
-    while current < end:
-        candidate = Appointment(master, master, 1, current)  # длительность 60 мин
+    while current + timedelta(minutes=duration) <= day_end:
+        candidate_end = current + timedelta(minutes=duration)
+        is_past = day < now.date() or (day == now.date() and current < now)
         is_busy = any(
-            b.starts_at < candidate.ends_at and current < b.ends_at for b in busy
+            existing.master == master
+            and existing.starts_at < candidate_end
+            and current < existing.ends_at
+            for existing in appointments
         )
-        if not is_busy:
+        if not is_past and not is_busy:
             result.append(f"{current:%H:%M}")
         current += timedelta(minutes=step_minutes)
 
