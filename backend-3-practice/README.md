@@ -1,60 +1,82 @@
-# Салон «БРИТВА» — база данных
+# Backend. Задание 3. SQLAlchemy и Alembic
 
-Учебный проект по лекции **«SQLAlchemy и Alembic»** модуля Backend.
+Учебный проект базы данных барбершопа «БРИТВА». Используются SQLAlchemy 2.x, SQLite и Alembic.
 
-## Что внутри
+## Состав проекта
 
-| Файл | Назначение |
-|---|---|
-| `solution.py` | Модели SQLAlchemy, наполнение базы, запросы через ORM, бизнес-логика свободных слотов |
-| `migrations/env.py` | Конфигурация Alembic |
-| `migrations/versions/0001_initial.py` | Первая миграция: создание всех таблиц |
+- solution.py — ORM-модели, связи, демонстрационные данные, запросы и бизнес-логика записи.
+- alembic.ini — конфигурация Alembic.
+- migrations/env.py — подключение метаданных моделей к Alembic.
+- migrations/versions/0001_initial.py — начальная миграция схемы.
+- tests/ — автоматические проверки моделей, запросов, бизнес-логики и миграций.
+- requirements.txt — зависимости.
 
-## Структура базы
+## Структура базы данных
 
-```
-categories ──< services ──< appointments >── masters
-                   │                            │
-                   └──── master_services ───────┘
-```
+В базе пять таблиц:
 
-- `categories` — категории услуг (стрижки, ногтевой сервис, барбер);
-- `services` — услуги с ценой и длительностью, ссылка на категорию;
-- `masters` — мастера салона;
-- `master_services` — связь «многие-ко-многим»: какой мастер какие услуги делает;
-- `appointments` — записи клиентов со временем начала и окончания.
+1. categories — категории услуг.
+2. services — услуги с ценой и продолжительностью.
+3. masters — мастера.
+4. master_services — связь многие-ко-многим между мастерами и услугами.
+5. appointments — записи клиентов.
 
-## Запуск
+Связи: Category → Service — один ко многим; Master ↔ Service — многие ко многим; Master → Appointment и Service → Appointment — один ко многим.
 
-```bash
-pip install sqlalchemy alembic
+## Установка и запуск
 
-# Создать базу и наполнить данными
-python solution.py
+Выполняйте команды из папки backend-3-practice.
 
-# Либо применить миграции
-alembic upgrade head
+    python -m venv .venv
+    .venv\Scripts\activate
+    pip install -r requirements.txt
+    alembic upgrade head
+    python solution.py seed
+    python solution.py queries
 
-# Откатить всё
-alembic downgrade base
-```
+Проверка свободных интервалов:
+
+    python solution.py slots --master-id 1 --service-id 1 --date 2030-01-16
+
+Запуск тестов:
+
+    pytest -q
+
+## Миграции
+
+Применить миграции: alembic upgrade head
+
+Проверить текущую версию: alembic current
+
+Проверить расхождения моделей и миграций: alembic check
+
+Откатить последнюю миграцию: alembic downgrade -1
+
+Откатить все миграции: alembic downgrade base
+
+После отката для повторного создания схемы выполните alembic upgrade head.
+
+Таблицы не создаются при импорте solution.py. Alembic является основным способом управления схемой. Команда python solution.py init-db предназначена только для учебной демонстрации создания схемы напрямую и не должна выполняться перед alembic upgrade head на той же пустой базе.
 
 ## Что демонстрируется
 
-1. **Декларативные модели** через `DeclarativeBase` и `Mapped`/`mapped_column`.
-2. **Связи**: один-ко-многим (`Category → Service`, `Master → Appointment`)
-   и многие-ко-многим (`Master ↔ Service` через `master_services`).
-3. **Запросы через ORM**: `select`, `join`, `group_by`, `func.count`, `func.sum`,
-   фильтры `where`, сортировка `order_by`.
-4. **Бизнес-логика**: `free_slots()` вычисляет свободные слоты мастера на день
-   на основе реальных записей из базы, а не захардкоженного массива.
-5. **Миграции**: миграция `0001_initial` создаёт схему, `downgrade` её удаляет.
+1. Декларативные модели SQLAlchemy 2.0 с DeclarativeBase, Mapped и mapped_column.
+2. Связи один-ко-многим и многие-ко-многим.
+3. Внешние ключи, ограничения CHECK, уникальность и индексы.
+4. ORM-запросы select, join, outerjoin, where, order_by, group_by, count и sum.
+5. Расчёт свободных интервалов с учётом продолжительности услуги, занятых и отменённых записей.
+6. Создание и отмена записи.
+7. Миграции Alembic с поддержкой чистой установки и отката.
 
-## Проверка
+## Демонстрационные данные
 
-```
-Категорий: 3
-Услуг: 6
-Мастеров: 3
-Записей: 2
-```
+При первом выполнении python solution.py seed создаются:
+
+- 3 категории;
+- 6 услуг;
+- 3 мастера;
+- 2 записи.
+
+Повторный запуск seed не дублирует данные.
+
+Для SQLite включена проверка внешних ключей через PRAGMA foreign_keys=ON. Переменная окружения DATABASE_URL позволяет указать альтернативную базу данных для тестирования и запуска.
