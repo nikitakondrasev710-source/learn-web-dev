@@ -40,7 +40,7 @@ HTML и CSS. Страница «Выбор даты и времени» по с�
 |---|---|---|
 | `backend-1-practice/solution.py` | Задание 1 — основы Python | Синтаксис, коллекции, функции, dataclass, обработка ошибок |
 | `backend-1-practice/README.md` | — | Описание разделов и ожидаемый вывод |
-| `backend-2-practice/solution.py` | Задание 2 — Web API на FastAPI | REST API: услуги, мастера, записи; GET/POST/DELETE, валидация, коды ответов |
+| `backend-2-practice/solution.py` | Задание 2 — Web API на FastAPI | REST API: услуги, мастера, записи; GET/POST/PATCH/DELETE, валидация, коды ответов |
 | `backend-3-practice/solution.py` | Задание 3 — SQLAlchemy и Alembic | Модели, связи, миграции, запросы через ORM |
 | `backend-4-practice/solution.py` | Задание 4 — Pydantic | APIRouter, схемы, кастомные валидаторы, бизнес-правила |
 | `backend-4-practice/README.md` | — | Схемы, валидаторы, роутеры, отличия от backend-2 |
@@ -68,15 +68,15 @@ python check_api.py   # автопроверка: 35 passed
 | Папка | Задание | Что внутри |
 |---|---|---|
 | `testing-1-practice/` | Задание 1 — виды тестирования и тест-план | `README.md`: пользовательский сценарий, источники требований, виды тестов, окружение, критерии, риски |
-| `testing-2-practice/` | Задание 2 — чек-лист и тест-кейсы | `README.md`: чек-лист на 37 пунктов, тест-кейсы TC-01…TC-15 |
-| `testing-3-practice/` | Задание 3 — баг-репорты | `README.md`: 12 баг-репортов (BUG-001…BUG-012) |
+| `testing-2-practice/` | Задание 2 — чек-лист и тест-кейсы | `README.md`: чек-лист на 38 пунктов, два тест-кейса TC-01 и TC-02, Use Case и UML-диаграмма |
+| `testing-3-practice/` | Задание 3 — баг-репорты | `README.md`: 13 баг-репортов (BUG-001…BUG-013); отдельное описание BUG-013 находится в `BUG-013.md` |
 | `testing-4-practice/` | Задание 4 — декомпозиция, матрица покрытия, сессия, отчёт | `decomposition.md`, `traceability-matrix.md`, `exploratory-session.md`, `README.md` — отчёт |
 
 Задание 4 (финальное по тестированию) состоит из четырёх частей:
 
 | Часть | Файл |
 |---|---|
-| Декомпозиция функционала и требования REQ-01…REQ-81 | `testing-4-practice/decomposition.md` |
+| Декомпозиция функционала и требования REQ-01…REQ-82 | `testing-4-practice/decomposition.md` |
 | Реестр неоднозначностей AMB-01…AMB-07 и источники требований | `testing-4-practice/decomposition.md`, раздел 0 |
 | Матрица покрытия, пробелы, дописанные TC-16…TC-40 | `testing-4-practice/traceability-matrix.md` |
 | Исследовательская сессия (exploratory, ad-hoc), BUG-009…BUG-012 | `testing-4-practice/exploratory-session.md` |
@@ -93,7 +93,7 @@ python check_api.py   # автопроверка: 35 passed
 Подтверждение, Успех) и три альтернативных (ошибка телефона,
 слот занят, ошибка сети). По нему сформулированы требования
 REQ-69…REQ-81 в `testing-4-practice/decomposition.md`; расхождения
-реализации с макетом — BUG-009…BUG-012.
+реализации с макетом — BUG-009…BUG-012; BUG-013 описывает необработанный конфликт занятого времени в альтернативном сценарии.
 
 ---
 
