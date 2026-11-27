@@ -1,0 +1,50 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Клиент" as Client
+actor "Backend API" as API
+
+rectangle "Веб-приложение «БРИТВА»" {
+  usecase "Оформить запись" as UC01
+  usecase "Выбрать услугу" as UC02
+  usecase "Выбрать мастера" as UC03
+  usecase "Выбрать дату" as UC04
+  usecase "Выбрать свободное время" as UC05
+  usecase "Проверить контактные данные" as UC06
+  usecase "Проверить доступность времени" as UC07
+  usecase "Создать запись" as UC08
+  usecase "Показать подтверждение" as UC09
+  usecase "Обработать неверный телефон" as ALT01
+  usecase "Обработать занятый слот" as ALT02
+  usecase "Обработать ошибку сети" as ALT03
+  usecase "Получить каталог услуг и мастеров" as API01
+  usecase "Получить свободные интервалы" as API02
+}
+
+Client --> UC01
+UC01 ..> UC02 : <<include>>
+UC01 ..> UC03 : <<include>>
+UC01 ..> UC04 : <<include>>
+UC01 ..> UC05 : <<include>>
+UC01 ..> UC06 : <<include>>
+UC01 ..> UC07 : <<include>>
+UC01 ..> UC08 : <<include>>
+UC01 ..> UC09 : <<include>>
+
+UC02 ..> API01 : <<include>>
+UC03 ..> API01 : <<include>>
+UC05 ..> API02 : <<include>>
+API --> API01
+API --> API02
+API --> UC07
+API --> UC08
+
+ALT01 ..> UC06 : <<extend>>
+ALT02 ..> UC07 : <<extend>>
+ALT03 ..> UC08 : <<extend>>
+Client --> ALT01
+Client --> ALT02
+Client --> ALT03
+
+@enduml
